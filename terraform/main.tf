@@ -26,7 +26,7 @@ resource "aws_lambda_function" "assignment_engine_lambda" {
 #  handler       = "index.test"
 #  create_package = false
   package_type  = "Image"
-  architectures = ["x86_64"]
+  architectures = ["arm64"]
 #  runtime = " python3.8"
 
   environment {
