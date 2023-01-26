@@ -19,11 +19,14 @@ resource "aws_lambda_function" "assignment_engine_lambda" {
   # If the file is not in the current working directory you will need to include a
   # path.module in the filename.
 #  filename      = var.filename
+  timeout       = 300
   image_uri     = "${data.terraform_remote_state.platform.outputs.ecr_assignment_engine_url}:${var.service_tag}"
   function_name = var.app_name
   role          = aws_iam_role.iam_for_lambda.arn
-  handler       = "index.test"
+#  handler       = "index.test"
+#  create_package = false
   package_type  = "Image"
+#  architectures = ["x86_64"]
 #  runtime = " python3.8"
 
   environment {

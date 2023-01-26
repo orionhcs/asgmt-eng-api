@@ -51,13 +51,15 @@ jobs:
           export SERVICE_TAG=`echo ${GITHUB_SHA} | cut -c1-8`
           export SERVICE_NAME=assignment_engine
           export ECR_REPO_URL=869932982124.dkr.ecr.us-west-2.amazonaws.com/
-          echo "::set-output name=LAMBDA_REPO_URL::${ECR_REPO_URL}${SERVICE_NAME}_php:${SERVICE_TAG}"
+          echo "::set-output name=LAMBDA_REPO_URL::${ECR_REPO_URL}${SERVICE_NAME}:${SERVICE_TAG}"
 
       - name: "Build and Push Lambda Container"
         uses: docker/build-push-action@v3
         with:
           context: .
           file: Dockerfile-infra
+          platforms: linux/amd64
+          provenance: false
           push: true
           tags: ${{ steps.set_ecr_vars.outputs.LAMBDA_REPO_URL }}
           cache-from: type=local,src=/tmp/.buildx-cache-assignment_engine
@@ -68,7 +70,7 @@ jobs:
 
       - name: Move cache
         run: |
-          rm -rf /tmp/.buildx-cache-php
+          rm -rf /tmp/.buildx-cache-assignment_engine
           mv /tmp/.buildx-cache-assignment_engine-new /tmp/.buildx-cache-assignment_engine
 
   Deploy:
@@ -104,10 +106,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ steps.assume_role.outputs.AWS_SECRET_ACCESS_KEY }}
           AWS_SESSION_TOKEN: ${{ steps.assume_role.outputs.AWS_SESSION_TOKEN }}
           AWS_REGION: ${{secrets.AWS_REGION}}
-        working-directory: ./terraform/infra
+        working-directory: ./terraform
         run: terraform init -upgrade -backend-config="app-dev.config"
       - name: Terraform Apply
-        working-directory: ./terraform/infra
+        working-directory: ./terraform
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.assume_role.outputs.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.assume_role.outputs.AWS_SECRET_ACCESS_KEY }}
