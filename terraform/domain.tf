@@ -1,5 +1,5 @@
 resource "aws_api_gateway_domain_name" "lambda_domain" {
-  certificate_arn = data.terraform_remote_state.platform.outputs.ecs_domain_certificate_validation_arn
+  certificate_arn = data.terraform_remote_state.platform.outputs.east_domain_certificate_validation_arn
   domain_name     = local.domain_name
 }
 

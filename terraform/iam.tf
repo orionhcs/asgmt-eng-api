@@ -36,6 +36,15 @@ resource "aws_iam_policy" "lambda_logging" {
       ],
       "Resource": "arn:aws:logs:*:*:*",
       "Effect": "Allow"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:*",
+        "logs:*",
+        "cloudwatch:*"
+      ],
+      "Resource": "*"
     }
   ]
 }
