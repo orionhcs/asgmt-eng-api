@@ -51,7 +51,7 @@ jobs:
           export SERVICE_TAG=`echo ${GITHUB_SHA} | cut -c1-8`
           export SERVICE_NAME=assignment_engine
           export ECR_REPO_URL=869932982124.dkr.ecr.us-west-2.amazonaws.com/
-          echo "::set-output name=LAMBDA_REPO_URL::${ECR_REPO_URL}${SERVICE_NAME}_php:${SERVICE_TAG}"
+          echo "::set-output name=LAMBDA_REPO_URL::${ECR_REPO_URL}${SERVICE_NAME}:${SERVICE_TAG}"
 
       - name: "Build and Push Lambda Container"
         uses: docker/build-push-action@v3
@@ -68,7 +68,7 @@ jobs:
 
       - name: Move cache
         run: |
-          rm -rf /tmp/.buildx-cache-php
+          rm -rf /tmp/.buildx-cache-assignment_engine
           mv /tmp/.buildx-cache-assignment_engine-new /tmp/.buildx-cache-assignment_engine
 
   Deploy:
