@@ -59,6 +59,7 @@ jobs:
           context: .
           file: Dockerfile-infra
           platforms: linux/amd64
+          provenance: false
           push: true
           tags: ${{ steps.set_ecr_vars.outputs.LAMBDA_REPO_URL }}
           cache-from: type=local,src=/tmp/.buildx-cache-assignment_engine
